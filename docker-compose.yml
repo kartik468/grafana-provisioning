@@ -1,0 +1,29 @@
+version: "3"
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
+networks:
+  grafana:
+
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - grafana
+
+  grafana:
+    image: kartik468/grafana:v7.0.0
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    networks:
+      - grafana
